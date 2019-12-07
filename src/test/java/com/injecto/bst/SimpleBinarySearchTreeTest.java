@@ -27,7 +27,7 @@ public class SimpleBinarySearchTreeTest {
         // arrange
         var bst = new SimpleBinarySearchTree<Integer, Void>();
 
-        var keys = List.of(1, 2, 3, 4, 5, 6, 7, 8);
+        var keys = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17);
         for (Integer key : keys) {
             bst.add(key, null);
         }
