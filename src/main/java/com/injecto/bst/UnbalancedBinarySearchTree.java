@@ -4,13 +4,16 @@ import javax.annotation.Nullable;
 
 public class UnbalancedBinarySearchTree<K extends Comparable<K>, V> implements BinarySearchTree<K, V> {
     @Nullable
-    private Node<K, V> root;
+    protected Node<K, V> root;
 
     @Override
-    public void add(K key, V value) {
-        root = add(root, key, value, 0);
+    public void add(K key, @Nullable V value) {
+        root = doAdd(root, key, value, 0);
     }
 
+    /**
+     * TODO why do I need level traversal in BST?
+     */
     @Nullable
     @Override
     public V search(K key) {
@@ -30,16 +33,23 @@ public class UnbalancedBinarySearchTree<K extends Comparable<K>, V> implements B
         return null;
     }
 
-    protected Node<K, V> add(@Nullable Node<K, V> node, K key, V value, int depth) {
+    /**
+     * @param node Node to new pair addition
+     * @param key Key
+     * @param value Value
+     * @param depth Depth of node
+     * @return Possible reassigned reference to node
+     */
+    protected Node<K, V> doAdd(@Nullable Node<K, V> node, K key, @Nullable V value, int depth) {
         if (node == null) {
             return new Node<>(key, value, depth);
         }
 
         int comparison = key.compareTo(node.key);
         if (comparison < 0) {
-            node.lesser = add(node.lesser, key, value, depth + 1);
+            node.lesser = doAdd(node.lesser, key, value, depth + 1);
         } else if (comparison > 0) {
-            node.larger = add(node.larger, key, value, depth + 1);
+            node.larger = doAdd(node.larger, key, value, depth + 1);
         } else {
             node.value = value;
             return node;

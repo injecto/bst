@@ -4,44 +4,50 @@ import javax.annotation.Nullable;
 
 class Node<K extends Comparable<K>, V> {
     K key;
-    V value;
+    @Nullable V value;
     @Nullable Node<K, V> lesser;
     @Nullable Node<K, V> larger;
+    /**
+     * Height of the subtree with root in this node
+     */
     int height = 1;
+    /**
+     * Depth of this node from tree root, started with 0
+     */
     int depth;
 
-    Node(K key, V value, int depth) {
+    Node(K key, @Nullable V value, int depth) {
         this.key = key;
         this.value = value;
         this.depth = depth;
     }
 
     Node<K, V> rightRotate() {
-        var x = lesser;
-        var t2 = x.larger;
+        var willBeHigher = lesser;
+        var toRebind = willBeHigher.larger;
 
-        x.larger = this;
-        lesser = t2;
+        willBeHigher.larger = this;
+        lesser = toRebind;
 
         height = Math.max(Utils.height(lesser), Utils.height(larger)) + 1;
-        x.height = Math.max(Utils.height(x.lesser), Utils.height(x.larger)) + 1;
+        willBeHigher.height = Math.max(Utils.height(willBeHigher.lesser), Utils.height(willBeHigher.larger)) + 1;
 
-        x.setDepth(x.depth - 1);
-        return x;
+        willBeHigher.setDepth(willBeHigher.depth - 1);
+        return willBeHigher;
     }
 
     Node<K, V> leftRotate() {
-        var x = larger;
-        var t2 = x.lesser;
+        var willBeHigher = larger;
+        var toRebind = willBeHigher.lesser;
 
-        x.lesser = this;
-        larger = t2;
+        willBeHigher.lesser = this;
+        larger = toRebind;
 
         height = Math.max(Utils.height(lesser), Utils.height(larger)) + 1;
-        x.height = Math.max(Utils.height(x.lesser), Utils.height(x.larger)) + 1;
+        willBeHigher.height = Math.max(Utils.height(willBeHigher.lesser), Utils.height(willBeHigher.larger)) + 1;
 
-        x.setDepth(x.depth - 1);
-        return x;
+        willBeHigher.setDepth(willBeHigher.depth - 1);
+        return willBeHigher;
     }
 
     void setDepth(int depth) {
